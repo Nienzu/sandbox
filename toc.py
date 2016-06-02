@@ -1,6 +1,13 @@
 import sys
 import fileinput
-for line in fileinput.input(sys.argv[2]):
-	print line,
-#print sys.argv[1].split(',')
 
+c = 0
+
+pair = sys.argv[1].split(',')
+for line in fileinput.input(sys.argv[2]):
+	for ppp in pair:
+		x=ppp.split('#')
+		if (x[0] in line) && (x[1]in line)
+			c=c+1
+
+print c
