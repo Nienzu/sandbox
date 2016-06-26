@@ -1,61 +1,37 @@
-# -*- coding:utf-8 -*-
-#F74021103 資訊三甲 郭珮羽 計理HW4
-#input:python TocHW4.py k /home/toc/redirects_zh.csv
-#output:Print keyword and the degree of the keyword sorted by the count of news in the descending order, and set the delimiter as a comma.
-#description:
-#每次讀一行資料，先將兩個node分別切下來放入node[]陣列中，(2*linenum)紀錄node個數
-#先將node[0]放入紀錄不重複名字的name[]陣列中，計算每個名字出現的次數(=邊數)放入陣列num[]中
-#再比對每個名字若出現第一次，則填入name[]陣列中，若已出現過，則次數(=邊數)加1
-#最後將num[]的資料作降冪排列放入陣列finalsort[]中，將num[]中的數值依照finalsort[]中的順序，與name[]一起印出。
-#遇到次數(=邊數)相同者，則依陣列checkornot[]判斷是否已經印過了。
-########################################################################################################################
+#-*- coding: utf-8 -*-
+#學號:F74026331
+#姓名:吳念祖
+#描述:我利用python內建的函式去處理字串，例如:in & split。也利用dict這個型別來處理結果，因此可以直接用sort來排序。整體來說就是利用pythonuf強大的字串處理功能來寫程式碼。這次作業跟hw3要注意的是換行會包進去split出來後的string, 所以要特別做處理。除此之外，我這次的作業跟hw3老實說我覺得差異不大，頂多只有一些判斷式的改。
 import sys
-#import time
-
-#start=time.time()
-node=[]
-name=[]
-num=[]
-linenum=0
-namenum=1
-
-finalsort=[]
-checkornot=[]
-
-#file = open(sys.argv[2],'r',encoding = 'utf8') #python3 method
-#file = open(sys.argv[2],'r')
-#content=file.readlines()
-#for line in content:
-for line in open(sys.argv[2],'r'):
-	line=line.strip('\n')
-		linenum=linenum+1
-		node.append(line.split('\t')[0])
-		node.append(line.split('\t')[2])
-
-name.append(node[0])
-num.append(1)
-
-for item1 in range(1,2*linenum,1):
-	flag=0
-	for item2 in range(0,namenum,1):
-		if node[item1] == name[item2]:
-			num[item2]=num[item2]+1
-			flag=1
-	if flag==0:
-		name.append(node[item1])
-		num.append(1)
-		namenum=namenum+1
-
-for item5 in range(0,namenum,1):
-	checkornot.append(0)
-
-finalsort=sorted(num,reverse=True)
-for item3 in range(0,int(sys.argv[1]),1):
-	for item4 in range(0,namenum,1):
-		if finalsort[item3]==num[item4] and checkornot[item4]==0:
-			print(name[item4]+','+str(num[item4]))
-			checkornot[item4]=1
-
-#file.close()
-#end=time.time()
-#print(end-start)
+import fileinput
+ex = dict()
+for line in fileinput.input(sys.argv[2]):
+	title = line.split("\t")
+	title[2] = title[2].rstrip('\n')
+	if (title[0] == title[2]):
+		if(not ex.has_key(title[0])):
+			ex[title[0]]=2
+		else:
+			ex[title[0]]= ex[title[0]]+2
+	else:
+		if ex.has_key(title[0]) and ex.has_key(title[2]):
+			ex[title[0]]= ex[title[0]]+1
+			ex[title[2]]= ex[title[2]]+1
+		elif not ex.has_key(title[0]) and ex.has_key(title[2]):
+			ex[title[0]]=1
+			ex[title[2]]=ex[title[2]]+1
+		elif ex.has_key(title[0]) and not ex.has_key(title[2]):
+			ex[title[0]]=ex[title[0]]+1
+			ex[title[2]]=1
+		else:
+			ex[title[0]]=1
+			ex[title[2]]=1
+k=int(sys.argv[1])
+degree = -1
+for x, y in sorted(ex.iteritems(), key=lambda(key,value): (value,key), reverse=True):	
+	if k <= 0:
+		if degree != int(y):	
+			break
+	k=k-1
+	degree = int(y)
+	print "%s,%s" % (x.rstrip('\n'), y) 
