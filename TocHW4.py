@@ -34,6 +34,13 @@ while 1:
 word = sorted(word.iteritems(), key=lambda a:a[1], reverse = True)
 
 i=0
-while i < int(num):
+degree = -1
+while 1:
+	if int(num) == 0:
+		break
 	print word[i][0] + "," + str(word[i][1])
+	degree = int(word[i][1])
 	i+=1
+	if i >= int(num):
+		if degree != int(word[i][1]):
+			break
